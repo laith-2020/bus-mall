@@ -47,26 +47,14 @@ for (var i = 0; i < namesOfProduct.length; i++) {
 var leftProduct, rightProduct, middleProduct; //global variables
 
 function renderImages() {
-     
   leftProduct = Product.all[randomNumber(0, Product.all.length - 1)];
   rightProduct = Product.all[randomNumber(0, Product.all.length - 1)];
   middleProduct = Product.all[randomNumber(0, Product.all.length - 1)];
 
-  if(leftProduct === rightProduct ) {
-  leftProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  rightProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-
+  if(leftProduct === middleProduct || leftProduct === rightProduct || rightProduct === middleProduct) {
+    renderImages();
   }
-  if(rightProduct === middleProduct ) {
-  rightProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  middleProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-
-  }
-  if(leftProduct === middleProduct ) {
-  leftProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  middleProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  }
-
+ 
   leftImage.src = leftProduct.imagePath;
   leftImage.alt = leftProduct.productName;
   leftImage.title = leftProduct.productName;
@@ -88,7 +76,7 @@ renderImages();
 iamgeSection.addEventListener("click", handleClick);
 
 function handleClick(event) {
-  if (totalClicks < 3) {
+  if (totalClicks < 24) {
     if (event.target.id !== "iamgeSection") {
       totalClicks++;
 
