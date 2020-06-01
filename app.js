@@ -91,7 +91,8 @@ function handleClick(event) {
       }
       renderImages();
     }
-  } else {
+  } else if (totalClicks === 24){
+    totalClicks++;
     renderResults();
   }
 }
