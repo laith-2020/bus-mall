@@ -105,7 +105,7 @@ renderImages();
 iamgeSection.addEventListener("click", handleClick);
 
 function handleClick(event) {
-  if (totalClicks < 4) {
+  if (totalClicks < 24) {
 
     if (event.target.id !== "iamgeSection") {
       totalClicks++;
