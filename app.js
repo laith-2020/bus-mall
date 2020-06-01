@@ -92,8 +92,9 @@ function handleClick(event) {
       renderImages();
     }
   } else if (totalClicks === 24){
-    totalClicks++;
     renderResults();
+   iamgeSection.removeEventListener("click", handleClick);
+
   }
 }
 
