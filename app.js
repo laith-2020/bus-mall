@@ -23,20 +23,24 @@ var namesOfProduct = [
   "wine-glass.jpg",
 ];
 
-var relod = [];
+
+//global variables
+
+var leftProduct, rightProduct, middleProduct;
+
 var viw = [];
 var cli = [];
 var totalClicks = 0;
 var firstIteration = [];
 var secondIteration = [];
 
-var leftImage = document.getElementById("leftImage");
+var leftImage = document.getElementById("leftImage"); // way to get the element 
 var middleImage = document.querySelector("#middleImage");
 var rightImage = document.querySelector("#rightImage");
 var iamgeSection = document.querySelector("#iamgeSection");
 
 function Product(name) {
-  this.productName = name.split(".")[0];
+  this.productName = name.split(".")[0]; // i used split  just to take the frute name withou the extention ex : banana
   this.imagePath = ` images/${name}`;
   this.clicks = 0;
   this.views = 0;
@@ -44,45 +48,66 @@ function Product(name) {
 }
 Product.all = [];
 
+
 for (var i = 0; i < namesOfProduct.length; i++) {
   new Product(namesOfProduct[i]);
 }
 
-var leftProduct, rightProduct, middleProduct; //global variables
 
+function checkRandomImages(){
+         checkRandomNumber();
+  //we give the value to the images 
+  leftProduct = Product.all[num1];
+  rightProduct = Product.all[num2];
+  middleProduct = Product.all[num3];
+
+  //check if the firstiteration not empty if not it will check the firstiteration and seconditeration and then if the firstiteration == seconditeration call the checkRandomImages();
+
+  if (firstIteration.length !== 0) {
+    secondIteration[0] = leftProduct.productName;
+    secondIteration[1] = rightProduct.productName;
+    secondIteration[2] = middleProduct.productName;
+
+    for (var i = 0; i < secondIteration.length; i++) {
+
+      for (var j = 0; j < firstIteration.length; j++) {
+        if (secondIteration[i] == firstIteration[j]) {
+          checkRandomImages();
+        }
+      }
+    }
+
+  }
+  else {
+    firstIteration[0] = leftProduct.productName;
+    firstIteration[1] = rightProduct.productName;
+    firstIteration[2] = middleProduct.productName;
+  }
+
+}
+
+
+// function to check 3 deferant number
+function checkRandomNumber() {
+  num1 = randomNumber(0, Product.all.length - 1);
+  num2 = randomNumber(0, Product.all.length - 1);
+  num3 = randomNumber(0, Product.all.length - 1);
+
+  if (num1 === num3 || num1 === num2 || num2 === num3) {
+    checkRandomNumber();
+  }
+}
+
+
+var num1, num2, num3;
 function renderImages() {
-  leftProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  rightProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  middleProduct = Product.all[randomNumber(0, Product.all.length - 1)];
+
+  checkRandomImages();
+  firstIteration[0] = leftProduct.productName;
+  firstIteration[1] = rightProduct.productName;
+  firstIteration[2] = middleProduct.productName;
 
 
-  if (leftProduct === middleProduct || leftProduct === rightProduct || rightProduct === middleProduct) {
-  leftProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  rightProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-  middleProduct = Product.all[randomNumber(0, Product.all.length - 1)];
- 
-  }
-
-
-  while (
-    leftProduct === middleProduct ||
-    leftProduct === rightProduct ||
-    middleProduct === rightProduct ||
-    relod.includes(leftProduct) ||
-    relod.includes(rightProduct) ||
-    relod.includes(middleProduct)
-  ) {
-    leftProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-    rightProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-    middleProduct = Product.all[randomNumber(0, Product.all.length - 1)];
-    relod = [];
-  }
-
-  relod.push(leftProduct);
-  relod.push(rightProduct);
-  relod.push(middleProduct);
-
-  
   leftImage.src = leftProduct.imagePath;
   leftImage.alt = leftProduct.productName;
   leftImage.title = leftProduct.productName;
@@ -97,9 +122,25 @@ function renderImages() {
   rightImage.alt = rightProduct.productName;
   rightImage.title = rightProduct.productName;
   rightProduct.views++;
+
 }
 renderImages();
 
+//store data
+function storeData() {
+  var store = JSON.stringify(Product.all);
+  localStorage.setItem('allProducts', store);
+}
+
+// get all the data
+function getData() {
+  var store = localStorage.getItem('allProducts');
+  console.log(store);
+  if (store) {
+    Product.all = JSON.parse(store);
+    renderResults();
+  }
+}
 
 
 iamgeSection.addEventListener("click", handleClick);
@@ -119,14 +160,17 @@ function handleClick(event) {
       if (event.target.id === "middleImage") {
         middleProduct.clicks++;
       }
+      storeData();
       renderImages();
     }
   } else {
     renderResults();
     iamgeSection.removeEventListener("click", handleClick);
   }
+
 }
 
+// function to get the result in the web page
 function renderResults() {
   var ule1 = document.getElementById("finalResult");
   for (var i = 0; i < Product.all.length; i++) {
@@ -138,17 +182,19 @@ function renderResults() {
   renderChart();
 }
 
+//helper function
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//function to push the total of view and click 
 function renderChart() {
   for (var i = 0; i < Product.all.length; i++) {
     viw.push(Product.all[i].views);
     cli.push(Product.all[i].clicks);
   }
 
-  console.log(viw);
+  // cahrt
   var ctx = document.getElementById("myChart").getContext("2d");
   var myChart = new Chart(ctx, {
     type: "bar",
@@ -293,3 +339,6 @@ function renderChart() {
     },
   });
 }
+
+
+getData();
