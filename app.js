@@ -48,14 +48,15 @@ function Product(name) {
 }
 Product.all = [];
 
-
+// create obj array for nameofproduct
 for (var i = 0; i < namesOfProduct.length; i++) {
   new Product(namesOfProduct[i]);
 }
 
 
-function checkRandomImages(){
-         checkRandomNumber();
+//function to check the random images and make it different in the all first 3 images and the second iteration 3 images 
+function checkRandomImages() {
+  checkRandomNumber();
   //we give the value to the images 
   leftProduct = Product.all[num1];
   rightProduct = Product.all[num2];
@@ -87,6 +88,7 @@ function checkRandomImages(){
 }
 
 
+var num1, num2, num3;
 // function to check 3 deferant number
 function checkRandomNumber() {
   num1 = randomNumber(0, Product.all.length - 1);
@@ -99,9 +101,7 @@ function checkRandomNumber() {
 }
 
 
-var num1, num2, num3;
 function renderImages() {
-
   checkRandomImages();
   firstIteration[0] = leftProduct.productName;
   firstIteration[1] = rightProduct.productName;
@@ -141,7 +141,6 @@ function getData() {
     renderResults();
   }
 }
-
 
 iamgeSection.addEventListener("click", handleClick);
 
@@ -339,6 +338,5 @@ function renderChart() {
     },
   });
 }
-
 
 getData();
